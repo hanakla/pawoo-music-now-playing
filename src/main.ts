@@ -85,7 +85,8 @@ const handleSock = (deckId: number, sock: WebSocket) => {
                 if (! request) return
 
                 pawooClient.post('statuses', {
-                    status: `<Deck${deckId}>\n${request.info} / ${request.link}\n#deck${deckId} #d${deckId}`
+                    status: `<Deck${deckId}>\n${request.info} / ${request.link}\n#deck${deckId} #d${deckId}`,
+                    visibility: 'unlisted',
                 }).catch(e => {
                     notifyToSlack(e.message, {text: e.stack})
                 })
