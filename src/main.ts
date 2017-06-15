@@ -66,7 +66,7 @@ const handleSock = (deckId: number, sock: WebSocket) => {
         console.log(`connected to deck ${deckId}`)
     })
 
-    sock.on('message', data => {
+    sock.on('message', async data => {
         const payload = parseEventPayload(data)
 
         switch (payload.event) {
@@ -84,8 +84,22 @@ const handleSock = (deckId: number, sock: WebSocket) => {
                 const request = requestMusicsStore[payload.payload.id]
                 if (! request) return
 
+                let user
+                try {
+                    user = (await pawooClient.get(`accounts/${request.account_id}`)).data
+                } catch (e) {
+                    console.log(e)
+                }
+
+                const userName = user ?
+                    (user.display_name ? `${user.display_name}さん (${user.username})` : `${user.username}さん`)
+                    : null
+
                 pawooClient.post('statuses', {
-                    status: `<Deck${deckId}>\n${request.info} / ${request.link}\n#deck${deckId} #d${deckId}`,
+                    status: `🔊 Deck${deckId} 🔊\n`
+                        + `${request.info} (via ${request.link} )\n `
+                        + `#deck${deckId} #d${deckId}\n`
+                        + (userName ? `----\nリクエスト: ${userName}` : ``),
                     visibility: 'unlisted',
                 }).catch(e => {
                     notifyToSlack(e.message, {text: e.stack})
