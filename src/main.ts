@@ -128,7 +128,7 @@ const handleSock = (deckId: number, sock: WebSocket) => {
 }
 
 (async () => {
-    const decks = [1, 2, 3]
+    const decks = [1, 2, 3, 4, 5, 6]
 
     await Promise.all(decks.map(async deckId => {
         const getting = await axios.get(`${BASE_URL}/api/v1/playlists/${deckId}`)
