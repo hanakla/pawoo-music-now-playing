@@ -83,9 +83,14 @@ const hashTagFor = (deckId: number) => {
 
 const handleSock = (deckId: number, sock: WebSocket) => {
     let heartBeatId
+    let forceTimeOutId
 
     const replaceSock = () => {
         clearInterval(heartBeatId)
+        clearTimeout(forceTimeOutId)
+
+        if (sock == null) return
+
         sock.removeAllListeners()
         sock.close()
         sock = null
@@ -94,7 +99,7 @@ const handleSock = (deckId: number, sock: WebSocket) => {
         handleSock(deckId, sockets[deckId])
     }
 
-    setTimeout(() => {
+    forceTimeOutId = setTimeout(() => {
         replaceSock()
         console.log(`Regularly reconnection successful (Deck:${deckId})`)
     }, 10 * 60  * 1000)
