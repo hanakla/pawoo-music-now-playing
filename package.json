@@ -5,7 +5,7 @@
   "author": "Ragg <ragg.devpr@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "build": "$(yarn bin)/tsc",
+    "build": "rm -rf dist && $(yarn bin)/tsc",
     "dev": "$(yarn bin)/tsc --watch"
   },
   "dependencies": {
