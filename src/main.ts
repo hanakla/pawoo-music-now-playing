@@ -62,6 +62,21 @@ const isAlive = (sock: WebSocket) => {
 const handleSock = (deckId: number, sock: WebSocket) => {
     let heartBeatId
 
+    const replaceSock = () => {
+        clearInterval(heartBeatId)
+        sock.removeAllListeners()
+        sock.close()
+        sock = null
+
+        sockets[deckId] = connectToDeck(deckId)
+        handleSock(deckId, sockets[deckId])
+    }
+
+    setTimeout(() => {
+        replaceSock()
+        console.log(`Regularly reconnection successful (Deck:${deckId})`)
+    }, 10 * 60  * 1000)
+
     sock.on('open', () => {
         console.log(`connected to deck ${deckId}`)
     })
@@ -112,19 +127,15 @@ const handleSock = (deckId: number, sock: WebSocket) => {
     sock.on('close', async () => {
         if (await isAlive(sock)) return
 
-        clearInterval(heartBeatId)
-        sock.removeAllListeners()
-        sock.close()
-        sock = null
-
-        sockets[deckId] = connectToDeck(deckId)
-        handleSock(deckId, sockets[deckId])
+        replaceSock()
+        console.log(`Socket closed reconnection successful (Deck:${deckId})`)
     })
 
     heartBeatId = setInterval(async () => {
         if (await isAlive(sock)) return
-        sock.close()
-    }, 5 * 60 * 1000)
+        replaceSock()
+        console.log(`Socket has gone, reconnected. (Deck:${deckId})`)
+    }, 1 * 60 * 1000)
 }
 
 (async () => {
