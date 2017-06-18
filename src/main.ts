@@ -7,6 +7,8 @@ import * as qs from 'querystring'
 import * as URL from 'url'
 import {DeckEventPayload, DeckRequestEntity, DeckInfo} from './DeckEventPayload'
 
+const APOLLO_END_TIME = new Date('2017-06-20').getTime()
+
 const notifyToSlack = (message: string, detail = {}) => {
     const req: any = {text: message}
     req.attachments = [detail]
@@ -60,9 +62,23 @@ const isAlive = (sock: WebSocket) => {
 }
 
 const deckNameFor = (deckId: number) => {
-    if (deckId === 2) return 'APOLLO A'
-    if (deckId === 3) return 'APOLLO B'
+    if (Date.now() <= APOLLO_END_TIME) {
+        if (deckId === 2) return 'APOLLO A'
+        if (deckId === 3) return 'APOLLO B'
+    }
+
     return `Deck${deckId}`
+}
+
+const hashTagFor = (deckId: number) => {
+    let tag = '#deck${deckId} #d${deckId}'
+
+    if (Date.now() <= APOLLO_END_TIME) {
+        if (deckId === 2) tag += ' #APOLLO_A'
+        if (deckId === 3) tag += ' #APOLLO_B'
+    }
+
+    return tag
 }
 
 const handleSock = (deckId: number, sock: WebSocket) => {
@@ -119,7 +135,7 @@ const handleSock = (deckId: number, sock: WebSocket) => {
                 pawooClient.post('statuses', {
                     status: `🔊 ${deckNameFor(deckId)} 🔊\n`
                         + `${request.info} (via ${request.link} )\n `
-                        + `#deck${deckId} #d${deckId}\n`
+                        + `${hashTagFor(deckId)}\n`
                         + (userName ? `----\nリクエスト: ${userName}` : ``),
                     visibility: 'unlisted',
                 }).catch(e => {
