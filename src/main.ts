@@ -59,6 +59,12 @@ const isAlive = (sock: WebSocket) => {
     return promise
 }
 
+const deckNameFor = (deckId: number) => {
+    if (deckId === 2) return 'APOLLO A'
+    if (deckId === 3) return 'APOLLO B'
+    return `Deck${deckId}`
+}
+
 const handleSock = (deckId: number, sock: WebSocket) => {
     let heartBeatId
 
@@ -111,7 +117,7 @@ const handleSock = (deckId: number, sock: WebSocket) => {
                     : null
 
                 pawooClient.post('statuses', {
-                    status: `🔊 Deck${deckId} 🔊\n`
+                    status: `🔊 ${deckNameFor(deckId)} 🔊\n`
                         + `${request.info} (via ${request.link} )\n `
                         + `#deck${deckId} #d${deckId}\n`
                         + (userName ? `----\nリクエスト: ${userName}` : ``),
