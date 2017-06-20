@@ -56,7 +56,11 @@ const isAlive = (sock: WebSocket) => {
         new Promise(resolve => { sock.once('pong', () => { sock = null; resolve(true) }) })
     ])
 
-    sock.ping()
+    try {
+        sock.ping()
+    } catch (e) {
+        return Promise.resolve(false)
+    }
 
     return promise
 }
