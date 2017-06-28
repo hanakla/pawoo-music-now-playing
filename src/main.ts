@@ -70,6 +70,8 @@ const deckNameFor = (deckId: number) => {
         if (deckId === 2) return 'APOLLO A'
         if (deckId === 3) return 'APOLLO B'
     }
+    
+    if (deckId === 346) return 'Pawoo Music'
 
     return `Deck${deckId}`
 }
