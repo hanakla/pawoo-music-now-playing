@@ -142,7 +142,7 @@ const handleSock = (deckId: number, sock: WebSocket) => {
                     : null
 
                 pawooClient.post('statuses', {
-                    status: `🔊 ${deckNameFor(deckId)} 🔊\n`
+                    status: ` ${deckNameFor(deckId)} \n`
                         + `${request.info} (via ${request.link} )\n `
                         + `${hashTagFor(deckId)}\n`
                         + (userName ? `----\nリクエスト: ${userName}` : ``),
@@ -170,7 +170,7 @@ const handleSock = (deckId: number, sock: WebSocket) => {
 }
 
 (async () => {
-    const decks = [1, 2, 3, 4, 5, 6]
+    const decks = [1, 2, 3, 4, 5, 6, 346]
 
     notifyToSlack('Restarted')
 
