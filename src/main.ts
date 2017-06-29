@@ -77,7 +77,7 @@ const deckNameFor = (deckId: number) => {
 }
 
 const hashTagFor = (deckId: number) => {
-    let tag = `#ch{deckId}`
+    let tag = `#ch${deckId}`
 
     if (Date.now() <= APOLLO_END_TIME) {
         if (deckId === 2) tag += ' #APOLLO_A'
