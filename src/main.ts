@@ -172,7 +172,7 @@ const handleSock = (deckId: number, sock: WebSocket) => {
 }
 
 (async () => {
-    const decks = [1, 2, 3, 6, 346]
+    const decks = [1, 2, 3, 4, 346]
 
     notifyToSlack('Restarted')
 
