@@ -73,11 +73,11 @@ const deckNameFor = (deckId: number) => {
     
     if (deckId === 346) return 'Pawoo Music'
 
-    return `Deck${deckId}`
+    return `Ch${deckId}`
 }
 
 const hashTagFor = (deckId: number) => {
-    let tag = `#deck${deckId} #d${deckId}`
+    let tag = `#ch{deckId}`
 
     if (Date.now() <= APOLLO_END_TIME) {
         if (deckId === 2) tag += ' #APOLLO_A'
